@@ -3,6 +3,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import multer from 'multer'
 dotenv.config()
+import fs from 'fs/promises'
 
 const app = express();
 const upload = multer({dest: 'uploads/'})
@@ -15,8 +16,19 @@ app.get('/', function (req, res) {
 });
 
 
-app.post('/api/fileanalyse', upload.single('file'), (req)=>{
-  res.json({message:"hello"})
+app.post('/api/fileanalyse', upload.single('upfile'), (req,res)=>{
+  if(!req.file){
+    res.status(400).json({error: 'no file uploaded'})
+    return 
+  }
+  console.log(req.file)
+
+  const {originalname, mimetype, size} = req.file
+  res.json({
+    name: originalname,
+    type: mimetype,
+    size: size,
+  })
 })
 
 
