@@ -1,8 +1,11 @@
-var express = require('express');
-var cors = require('cors');
-require('dotenv').config()
+import express from 'express'
+import cors from 'cors'
+import dotenv from 'dotenv'
+import multer from 'multer'
+dotenv.config()
 
-var app = express();
+const app = express();
+const upload = multer({dest: 'uploads/'})
 
 app.use(cors());
 app.use('/public', express.static(process.cwd() + '/public'));
@@ -11,6 +14,10 @@ app.get('/', function (req, res) {
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
+
+app.post('/api/fileanalyse', upload.single('file'), (req)=>{
+  res.json({message:"hello"})
+})
 
 
 
